@@ -1,0 +1,24 @@
+{
+  "name": "chromePlugin",
+  "version": "0.9.0",
+  "manifest_version": 2,
+  "description": "chrome plugin demo",
+  "browser_action": {
+    "default_icon": "static/icon.png",
+    "default_title": "Todo List",
+    "default_popup": "template/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "run_at": "document_idle",
+      "js": ["static/content.js"]
+    }
+  ],
+  "permissions":
+  [
+    "storage",
+    "http://*/*",
+    "https://*/*"
+  ]
+}
