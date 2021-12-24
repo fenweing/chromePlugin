@@ -19,6 +19,15 @@
                 html: outHtml,
                 url: url
             });
+            return;
+        }
+        if (request.cmd == 'responseMessage') {
+            alert(request.value);
+            return;
+        }
+        if (request.cmd == 'newTab') {
+            window.open(request.value, 'target', '');
+            return;
         }
     });
 })();

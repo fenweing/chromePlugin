@@ -23,35 +23,66 @@
         $addNewItem: document.getElementById('add-new-item'),
         titleInput: $('#titleInput'),
         serverUrl: $('#serverUrlInput'),
+        indexPageBtn: $('#indexPageBtn'),
         init: function () {
             //打开添加文本框
             Tasks.$addNewItem.addEventListener('click', function () {
                 sendMessageToContentScript({cmd: 'getOutHtml', value: 'getOutHtml'}, function (response) {
-                    console.log('来自content的回复：' + response);
-                    var url = response.url;
-                    var htmlValue = response.html;
-                    var title = Tasks.titleInput.val();
-                    let serverUrl = Tasks.serverUrl.val();
-                    var url = "http://localhost:8081/addOutHtml";
-                    if (serverUrl != null || serverUrl != '') {
-                        url = serverUrl;
-                    }
-                    $.ajax({
-                            url: url,
-                            data: JSON.stringify({
-                                html: htmlValue,
-                                url: url,
-                                title: title
-                            }),
-                            type: "POST",
-                            success: function (data) {
-                                console.log("addOutHtml请求返回：" + data);
-                            },
-                            contentType: "application/json"
+                    try {
+                        var url = response.url;
+                        var htmlValue = response.html;
+                        var title = Tasks.titleInput.val();
+                        let serverUrl = Tasks.serverUrl.val();
+                        if (serverUrl == null || serverUrl == '') {
+                            serverUrl = config.addHtmlUrl;
                         }
-                    );
+                        $.ajax({
+                                url: serverUrl,
+                                data: JSON.stringify({
+                                    html: htmlValue,
+                                    url: url,
+                                    title: title
+                                }),
+                                type: "POST",
+                                success: function (data) {
+                                    console.log("addOutHtml请求返回：" + data);
+                                    var responseMessage = "";
+                                    if (data == null || data == "") {
+                                        responseMessage = "服务器返回为空！"
+                                    } else {
+                                        var success = data.success;
+                                        if (success) {
+                                            responseMessage = "添加成功";
+                                        } else {
+                                            responseMessage = "添加出错：" + data.message;
+                                        }
+                                    }
+                                    sendMessageToContentScript({
+                                        cmd: 'responseMessage',
+                                        value: responseMessage
+                                    }, function (response) {
+                                    });
+                                },
+                                contentType: "application/json"
+                            }
+                        );
+                    } catch (e) {
+                        console.error("处理html数据出错！" + e);
+                        sendMessageToContentScript({
+                            cmd: 'responseMessage',
+                            value: "处理html数据出错！" + e.toString()
+                        }, function (response) {
+                        });
+                    }
                 });
             }, true);
+            Tasks.indexPageBtn.click(function (e) {
+                sendMessageToContentScript({
+                    cmd: 'newTab',
+                    value: config.indexPageUrl
+                }, function (response) {
+                });
+            })
         }
     };
     Tasks.init();

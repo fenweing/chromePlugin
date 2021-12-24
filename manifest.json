@@ -12,7 +12,7 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "run_at": "document_idle",
-      "js": ["static/content.js"]
+      "js": ["static/content.js","static/config.js"]
     }
   ],
   "permissions":
