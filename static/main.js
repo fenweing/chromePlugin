@@ -20,13 +20,16 @@
             obj.className = 'hide';
             return this;
         },
-        $addNewItem: document.getElementById('add-new-item'),
+        addNewItem: $('#add-new-item'),
         titleInput: $('#titleInput'),
         serverUrl: $('#serverUrlInput'),
         indexPageBtn: $('#indexPageBtn'),
+        transmissionTrackerBtn: $('#transmissionTrackerBtn'),
+        ariaTrackerBtn: $('#ariaTrackerBtn'),
         init: function () {
             //打开添加文本框
-            Tasks.$addNewItem.addEventListener('click', function () {
+            // Tasks.$addNewItem.addEventListener('click', function () {
+            Tasks.addNewItem.click(function () {
                 sendMessageToContentScript({cmd: 'getOutHtml', value: 'getOutHtml'}, function (response) {
                     try {
                         var url = response.url;
@@ -82,7 +85,21 @@
                     value: config.indexPageUrl
                 }, function (response) {
                 });
-            })
+            });
+            Tasks.transmissionTrackerBtn.click(function (e) {
+                sendMessageToContentScript({
+                    cmd: 'newTab',
+                    value: config.transmissionTrackerUrl
+                }, function (response) {
+                });
+            });
+            Tasks.ariaTrackerBtn.click(function (e) {
+                sendMessageToContentScript({
+                    cmd: 'newTab',
+                    value: config.ariaTrackerUrl
+                }, function (response) {
+                });
+            });
         }
     };
     Tasks.init();
