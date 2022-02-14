@@ -29,7 +29,7 @@
         init: function () {
             //打开添加文本框
             // Tasks.$addNewItem.addEventListener('click', function () {
-            Tasks.addNewItem.click(function () {
+            Tasks.addNewItem.click(function (e) {
                 sendMessageToContentScript({cmd: 'getOutHtml', value: 'getOutHtml'}, function (response) {
                     try {
                         var url = response.url;
@@ -78,7 +78,7 @@
                         });
                     }
                 });
-            }, true);
+            });
             Tasks.indexPageBtn.click(function (e) {
                 sendMessageToContentScript({
                     cmd: 'newTab',
