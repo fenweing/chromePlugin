@@ -25,6 +25,7 @@
         serverUrl: $('#serverUrlInput'),
         indexPageBtn: $('#indexPageBtn'),
         transmissionTrackerBtn: $('#transmissionTrackerBtn'),
+        transmissionPageBtn: $('#transmissionPageBtn'),
         ariaTrackerBtn: $('#ariaTrackerBtn'),
         init: function () {
             //打开添加文本框
@@ -90,6 +91,13 @@
                 sendMessageToContentScript({
                     cmd: 'newTab',
                     value: config.transmissionTrackerUrl
+                }, function (response) {
+                });
+            });
+            Tasks.transmissionPageBtn.click(function (e) {
+                sendMessageToContentScript({
+                    cmd: 'newTab',
+                    value: config.transmissionPageUrl
                 }, function (response) {
                 });
             });
